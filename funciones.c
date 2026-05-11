@@ -5,11 +5,11 @@
 
 #define MAX_CHIPS 3
 
-int validateInts () {
+int validateInts() {
 
-    int n, aux = 0 ;
+    int n, aux = 0;
 
-    while(aux !=1 ){
+    while(aux !=1){
         aux = scanf("%d",&n);
         while((getchar()) != '\n');
         if (aux != 1){
@@ -18,12 +18,12 @@ int validateInts () {
         }
     }
 
-    return n ;
+    return n;
 }
 
-float validateFloats () {
+float validateFloats() {
 
-    float n, aux = 0 ;
+    float n, aux = 0;
 
     aux = scanf("%f",&n);
      while(aux !=1 ){
@@ -35,7 +35,7 @@ float validateFloats () {
         }
     }
 
-    return n ;
+    return n;
 }
 
 void readChain(char *chain, int n){
