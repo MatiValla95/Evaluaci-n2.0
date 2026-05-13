@@ -106,7 +106,7 @@ int menu ( char chips[MAX_CHIPS][20] , int stockChips[MAX_CHIPS], int *buttons, 
 
             break;
         case 8:
-            viewMaterialsStock(chips, stockChips, *buttons, *metalParts);
+            viewMaterialsStock(chips, stockChips, buttons, metalParts);
             viewProductsInfo(products, chips, productsChips, productsPrice , productsCostMaterial);
             
 
@@ -507,15 +507,15 @@ void deleteProductandtheMaterialsitneeds(char products[MAX_CHIPS][20], char chip
 }
 
 
-void viewMaterialsStock(char chips[MAX_CHIPS][20], int stockChips[MAX_CHIPS], int buttons, int metalParts){
+void viewMaterialsStock(char chips[MAX_CHIPS][20], int stockChips[MAX_CHIPS], int *buttons, int *metalParts){
     printf("\n======= STOCK DE MATERIALES =======\n");
 
     for(int i = 0; i < MAX_CHIPS; i++){
         printf("- Chips %s: %d\n", chips[i], stockChips[i]);
     }
 
-    printf("- Botones: %d\n", buttons);
-    printf("- Partes metalicas: %d\n", metalParts);
+    printf("- Botones: %d\n", *buttons);
+    printf("- Partes metalicas: %d\n", *metalParts);
 
     printf("====================================\n");
 }
