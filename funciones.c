@@ -21,6 +21,7 @@ int validateInts() {
     return n;
 }
 
+
 float validateFloats() {
 
     float n, aux = 0;
@@ -38,13 +39,13 @@ float validateFloats() {
     return n;
 }
 
+
 void readChain(char *chain, int n){
     int len;
     fgets(chain,n,stdin);
     len = strlen(chain) - 1;
     chain[len] = '\0';
 }
-
 
 
 int menu ( char chips[MAX_CHIPS][20] , int stockChips[MAX_CHIPS], int *buttons, int *metalParts , int productsCostMaterial[MAX_CHIPS][MAX_CHIPS],  char products[MAX_CHIPS][20], int productsChips[MAX_CHIPS][MAX_CHIPS], float productsPrice [MAX_CHIPS]) {
@@ -60,7 +61,8 @@ int menu ( char chips[MAX_CHIPS][20] , int stockChips[MAX_CHIPS], int *buttons, 
     printf("5.-Editar nombres de los productos\n");
     printf("6.-Editar cantidad de materiales de fabricacion de los productos\n");
     printf("7.-Eliminar un producto\n");
-    printf("8.-Cerrar programa\n");
+    printf("8.-Ver el stock de materiales e informacion de los productos\n");
+    printf("9.-Salir del programa\n");
     printf(">> ");
 
     opt = validateInts();
@@ -98,21 +100,24 @@ int menu ( char chips[MAX_CHIPS][20] , int stockChips[MAX_CHIPS], int *buttons, 
 
 
             break;
-
         case 7:
-            deleteProduct(products, chips, productsChips, productsPrice , productsCostMaterial);
+            deleteProductandtheMaterialsitneeds(products, chips, productsChips, productsPrice , productsCostMaterial);
 
 
             break;
         case 8:
-            printf("Programa finalizado, gracias por usarlo\n");
+            viewMaterialsStock(chips, stockChips, *buttons, *metalParts);
+            viewProductsInfo(products, chips, productsChips, productsPrice , productsCostMaterial);
+            
 
             break;
+        case 9:
+            printf("Finalizando programa...\n");
 
+            break;
     }
 
     return opt;
-
 }
 
 
@@ -127,39 +132,35 @@ void enterMaterials (char chips[MAX_CHIPS][20] , int stockChips[MAX_CHIPS], int 
     printf("Ahora por favor ingrese la cantidad de botones con la que cuenta: \n");
         *buttons = validateInts();
 
-    printf("Ahora por favor ingrese la cantidad de partes metálicas con la que cuenta: \n");
+    printf("Ahora por favor ingrese la cantidad de partes metalicas con la que cuenta: \n");
         *metalParts = validateInts();
     
-    printf("Datos ingresados con exito \n");
-
+    printf("Datos Ingresados con Exito\n");
 
 }
 
 
-
-
 void registerProducts (int productsCostMaterial[MAX_CHIPS][MAX_CHIPS], char products[MAX_CHIPS][20], char chips [MAX_CHIPS][20] , int productsChips[MAX_CHIPS][MAX_CHIPS], float productsPrice [MAX_CHIPS]){
-    printf("Por favor ingrese el nombre y los materiales de fabricación de todos los productos: \n");
+    printf("Por favor ingrese el nombre y los materiales de fabricacion de todos los productos: \n");
     for (int i = 0 ; i < MAX_CHIPS ; i++){
-            printf("Ingrese el nombre del producto numero %d: \n", i + 1);
-            readChain(products[i],20);
-            for(int j = 0 ; j < MAX_CHIPS ; j++){
-                printf("Ahora por favor ingrese cuantos chips %s va a necesitar el producto para realizarse: \n",chips[j]);
-                productsChips[i][j] = validateInts();
-            }
-            printf("Ahora por favor ingrese cuantos botones va a necesitar el producto para realizarse: \n");
-            productsCostMaterial[i][0] = validateInts();
-            printf("Ahora por favor ingrese cuantas partes de metal  va a necesitar el producto para realizarse: \n");
-            productsCostMaterial[i][1] = validateInts();
-            printf("Ahora por favor ingrese cuanto tiempo se demora el producto en fabricarse: \n");
-            productsCostMaterial[i][2] = validateInts(); 
-            printf("Por favor ahora ingrese el precio del producto: \n");
-            productsPrice[i] = validateFloats();
-
-            
+        printf("Ingrese el nombre del producto numero %d: \n", i + 1);
+        getchar();
+        readChain(products[i],20);
+        for(int j = 0 ; j < MAX_CHIPS ; j++){
+            printf("Ahora por favor ingrese cuantos chips %s va a necesitar el producto para realizarse: \n",chips[j]);
+            productsChips[i][j] = validateInts();
         }
+        printf("Ahora por favor ingrese cuantos botones va a necesitar el producto para realizarse: \n");
+        productsCostMaterial[i][0] = validateInts();
+        printf("Ahora por favor ingrese cuantas partes de metal va a necesitar el producto para realizarse: \n");
+        productsCostMaterial[i][1] = validateInts();
+        printf("Ahora por favor ingrese cuanto tiempo se demora el producto en fabricarse: \n");
+        productsCostMaterial[i][2] = validateInts(); 
+        printf("Por favor ahora ingrese el precio del producto: \n");
+        productsPrice[i] = validateFloats();
+    }
 
-    printf("Datos ingresados con exito");
+    printf("Datos Ingresados con Exito");
 
     printf("\n========== INFORMACION DE PRODUCTOS ==========\n");
 
@@ -195,6 +196,7 @@ void registerProducts (int productsCostMaterial[MAX_CHIPS][MAX_CHIPS], char prod
 
 
 }
+
 
 void createAndSellProducts(char chips[MAX_CHIPS][20] , int stockChips[MAX_CHIPS], int *buttons, int *metalParts , int productsCostMaterial[MAX_CHIPS][MAX_CHIPS],  char products[MAX_CHIPS][20], int productsChips[MAX_CHIPS][MAX_CHIPS], float productsPrice [MAX_CHIPS]){
     int optCrt = 0, itsOkay = 0 , numberProducts = 0;
@@ -256,6 +258,7 @@ void createAndSellProducts(char chips[MAX_CHIPS][20] , int stockChips[MAX_CHIPS]
 
 }
 
+
 void addMaterialStock (char chips[MAX_CHIPS][20], int *buttons, int *metalParts, int stockChips[MAX_CHIPS]){
     int optAddChip = 0;
     int optAddMat = 0;
@@ -269,21 +272,21 @@ void addMaterialStock (char chips[MAX_CHIPS][20], int *buttons, int *metalParts,
         optAddChip = validateInts();
         if(optAddChip >= 0 && optAddChip <= 2){
             printf("Perfecto usted selecciono al chip: %s \n", chips[optAddChip]);
-            printf("Por favor ingrese el numero de chips que desea añadir: \n");
+            printf("Por favor ingrese el numero de chips que desea añadir:\n");
             stockChips[optAddChip] = stockChips[optAddChip] + validateInts();
             printf("Chips agregados con exito \n Ahora su stock es: %d \n", stockChips[optAddChip]);
         }
-        printf("Seleccione el numero del material que desea añadir \n1.-Botones \n2.-Metal");
+        printf("Seleccione el numero del material que desea añadir\n 1.-Botones\n 2.-Metal");
             optAddMat = validateInts();
             if(optAddMat == 1){
-                printf("Por favor ingrese el numero de botones que desea añadir \n");
+                printf("Por favor ingrese el numero de botones que desea añadir:\n");
                 *buttons = *buttons + validateInts();
-                printf("Botones agregados con exito \n Ahora su stock es: %d", *buttons);
+                printf("Botones agregados con exito\n Ahora su stock es: %d", *buttons);
             }
             if(optAddMat == 2){
-                printf("Por favor ingrese el numero de metales que desea añadir \n");
+                printf("Por favor ingrese el numero de metales que desea añadir:\n");
                 *metalParts = *metalParts + validateInts();
-                printf("Partes de metal agregadas con exito \n Ahora su stock es: %d \n", *metalParts);
+                printf("Partes de metal agregadas con exito\n Ahora su stock es: %d\n", *metalParts);
             }
 
             printf("Si desea seguir añadiendo mas materiales a stock presione cualquier numero, caso contrario presione 1");
@@ -298,7 +301,7 @@ void addMaterialStock (char chips[MAX_CHIPS][20], int *buttons, int *metalParts,
 void changeProductsName(char products[MAX_CHIPS][20]){
         char name[20];
         int nameFound = 0 ;
-        printf("Por favor ingrese el nombre del producto al que desea cambiarle el nombre \n");
+        printf("Por favor ingrese el nombre del producto al que desea cambiarle el nombre:\n");
         
 
         while(nameFound == 0){
@@ -307,7 +310,7 @@ void changeProductsName(char products[MAX_CHIPS][20]){
             for(int i = 0; i < MAX_CHIPS ; i++){
                 
                 if(strcmp(name, products[i]) == 0){
-                    printf("Por favor ingrese el nuevo nombre; \n");
+                    printf("Por favor ingrese el nuevo nombre:\n");
                     readChain(products[i],20);
                     nameFound = 1;
                     break;
@@ -318,8 +321,9 @@ void changeProductsName(char products[MAX_CHIPS][20]){
                 printf("Producto no encontrado, intente nuevamente\n");
             }
         }
-        printf("Nuevo nombre ingresado con exito \n");
+        printf("Nuevo Nombre Ingresado con Exito \n");
 }
+
 
 void changeProductsMaterialsNeed(char products[MAX_CHIPS][20], char chips[MAX_CHIPS][20], int productsChips[MAX_CHIPS][MAX_CHIPS], float productsPrice [MAX_CHIPS], int productsCostMaterial[MAX_CHIPS][MAX_CHIPS]){
     char name[20];
@@ -460,7 +464,8 @@ void changeProductsMaterialsNeed(char products[MAX_CHIPS][20], char chips[MAX_CH
     }
 }
 
-void deleteProduct(char products[MAX_CHIPS][20], char chips[MAX_CHIPS][20], int productsChips[MAX_CHIPS][MAX_CHIPS], float productsPrice [MAX_CHIPS], int productsCostMaterial[MAX_CHIPS][MAX_CHIPS]){
+
+void deleteProductandtheMaterialsitneeds(char products[MAX_CHIPS][20], char chips[MAX_CHIPS][20], int productsChips[MAX_CHIPS][MAX_CHIPS], float productsPrice [MAX_CHIPS], int productsCostMaterial[MAX_CHIPS][MAX_CHIPS]){
     char name[20];
     int productFound = 0;
 
@@ -476,25 +481,17 @@ void deleteProduct(char products[MAX_CHIPS][20], char chips[MAX_CHIPS][20], int 
 
                 productFound = 1;
 
-                for(int j = i; j < 2; j++){
-                    strcpy(products[j], products[j + 1]);
-                    for(int k = 0; k < MAX_CHIPS; k++){
-                        productsChips[j][k] = productsChips[j + 1][k];
-                    }
-                    productsCostMaterial[j][0] = productsCostMaterial[j + 1][0];
-                    productsCostMaterial[j][1] = productsCostMaterial[j + 1][1];
-                    productsCostMaterial[j][2] = productsCostMaterial[j + 1][2];
-                    productsPrice[j] = productsPrice[j + 1];
+    
+                strcpy(products[i], "");
+
+                for(int j = 0; j < MAX_CHIPS; j++){
+                    productsChips[i][j] = 0;
                 }
 
-                strcpy(products[2], "");
-                for(int k = 0; k < MAX_CHIPS; k++){
-                    productsChips[2][k] = 0;
-                }
-                productsCostMaterial[2][0] = 0;
-                productsCostMaterial[2][1] = 0;
-                productsCostMaterial[2][2] = 0;
-                productsPrice[2] = 0.0;
+                productsCostMaterial[i][0] = 0;
+                productsCostMaterial[i][1] = 0;
+                productsCostMaterial[i][2] = 0;
+                productsPrice[i] = 0.0;
 
                 printf("Producto eliminado con exito\n");
 
@@ -507,4 +504,53 @@ void deleteProduct(char products[MAX_CHIPS][20], char chips[MAX_CHIPS][20], int 
             printf("Producto no encontrado, intente nuevamente\n");
         }
     }
+}
+
+
+void viewMaterialsStock(char chips[MAX_CHIPS][20], int stockChips[MAX_CHIPS], int buttons, int metalParts){
+    printf("\n======= STOCK DE MATERIALES =======\n");
+
+    for(int i = 0; i < MAX_CHIPS; i++){
+        printf("- Chips %s: %d\n", chips[i], stockChips[i]);
+    }
+
+    printf("- Botones: %d\n", buttons);
+    printf("- Partes metalicas: %d\n", metalParts);
+
+    printf("====================================\n");
+}
+
+
+void viewProductsInfo(char products[MAX_CHIPS][20], char chips[MAX_CHIPS][20], int productsChips[MAX_CHIPS][MAX_CHIPS], float productsPrice [MAX_CHIPS], int productsCostMaterial[MAX_CHIPS][MAX_CHIPS]){
+    printf("\n======= INFORMACION DE PRODUCTOS =======\n");
+
+    for(int i = 0; i < MAX_CHIPS; i++){
+
+        printf("\n----------------------------------------\n");
+
+        printf("PRODUCTO: %s\n", products[i]);
+
+        printf("\nMateriales necesarios:\n");
+
+        for(int j = 0; j < MAX_CHIPS; j++){
+
+            printf("- Chips %s: %d\n",
+                   chips[j],
+                   productsChips[i][j]);
+        }
+
+        printf("- Botones: %d\n",
+               productsCostMaterial[i][0]);
+
+        printf("- Partes metalicas: %d\n",
+               productsCostMaterial[i][1]);
+
+        printf("- Tiempo de fabricacion: %d minutos\n",
+               productsCostMaterial[i][2]);
+        printf("- Precio: %.2f dolares\n",
+               productsPrice[i]);
+
+    }
+
+    printf("\n==============================================\n");
 }
