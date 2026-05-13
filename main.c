@@ -17,10 +17,13 @@ int main(){
     while(optC != 1){
 
         optM = menu(chips, stockChips, &buttons, &metalParts, productsCostMaterial, products , productsChips, productsPrice);
+        printf("\nSi desea continuar presione '0', caso contrario presione '1'\n");
+        printf(">> ");
+    
         optC = validateInts();
     }
-    printf("Si desea continuar presione 0, caso contrario presione 1\n");
-    printf(">> ");
+ 
+    printf("\nGracias por usar nuestro programa, hasta luego\n");
 
     return 0;
 }
